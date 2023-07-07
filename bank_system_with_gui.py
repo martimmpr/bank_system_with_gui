@@ -597,14 +597,17 @@ class Bank:
             except ValueError:
                 bankUI.open_notification_window("Quantidade inválida!")
             else:
-                if amount <= money_hand:
-                    money_hand -= amount
-                    self.accounts.loc[self.accounts['account_number'] == number, 'balance'] += amount
-                    bankUI.open_notification_window(f"Depósito de {amount}€ com sucesso!")
-                    bankUI.change_money_on_hand(money_hand)
-                    bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
+                if amount > 0:
+                    if amount <= money_hand:
+                        money_hand -= amount
+                        self.accounts.loc[self.accounts['account_number'] == number, 'balance'] += amount
+                        bankUI.open_notification_window(f"Depósito de {amount}€ com sucesso!")
+                        bankUI.change_money_on_hand(money_hand)
+                        bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
+                    else:
+                        bankUI.open_notification_window("Dinheiro insuficiente!")
                 else:
-                    bankUI.open_notification_window("Dinheiro insuficiente!")
+                    bankUI.open_notification_window("Quantidade inválida!")
         else:
             bankUI.open_notification_window("Necessitas de estar numa conta!")
 
@@ -615,17 +618,20 @@ class Bank:
             except ValueError:
                 bankUI.open_notification_window("Quantidade inválida!")
             else:
-                filter_balance = self.accounts[self.accounts['account_number'] == number]
-                balance = filter_balance['balance'].values[0]
-
-                if amount <= balance:
-                    money_hand += amount
-                    self.accounts.loc[self.accounts['account_number'] == number, 'balance'] -= amount
-                    bankUI.open_notification_window(f"Levantamento de {amount}€ com sucesso!")
-                    bankUI.change_money_on_hand(money_hand)
-                    bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
+                if amount > 0:
+                    filter_balance = self.accounts[self.accounts['account_number'] == number]
+                    balance = filter_balance['balance'].values[0]
+    
+                    if amount <= balance:
+                        money_hand += amount
+                        self.accounts.loc[self.accounts['account_number'] == number, 'balance'] -= amount
+                        bankUI.open_notification_window(f"Levantamento de {amount}€ com sucesso!")
+                        bankUI.change_money_on_hand(money_hand)
+                        bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
+                    else:
+                        bankUI.open_notification_window("Dinheiro insuficiente!")
                 else:
-                    bankUI.open_notification_window("Dinheiro insuficiente!")
+                    bankUI.open_notification_window("Quantidade inválida!")
         else:
             bankUI.open_notification_window("Necessitas de estar numa conta")
         
@@ -637,16 +643,19 @@ class Bank:
                 except ValueError:
                     bankUI.open_notification_window("Quantidade inválida!")
                 else:
-                    filter_balance = self.accounts[self.accounts['account_number'] == number]
-                    balance = filter_balance['balance'].values[0]
-    
-                    if amount <= balance:
-                        self.accounts.loc[self.accounts['account_number'] == number, 'balance'] -= amount
-                        self.accounts.loc[self.accounts['account_number'] == number_to, 'balance'] += amount
-                        bankUI.open_notification_window(f"Transferido {amount}€ com sucesso!")
-                        bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
+                    if amount > 0:
+                        filter_balance = self.accounts[self.accounts['account_number'] == number]
+                        balance = filter_balance['balance'].values[0]
+        
+                        if amount <= balance:
+                            self.accounts.loc[self.accounts['account_number'] == number, 'balance'] -= amount
+                            self.accounts.loc[self.accounts['account_number'] == number_to, 'balance'] += amount
+                            bankUI.open_notification_window(f"Transferido {amount}€ com sucesso!")
+                            bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
+                        else:
+                            bankUI.open_notification_window("Dinheiro insuficiente!")
                     else:
-                        bankUI.open_notification_window("Dinheiro insuficiente!")
+                        bankUI.open_notification_window("Quantidade inválida!")
             else:
                 bankUI.open_notification_window("Número de destinatário inválido!")
         else:
@@ -659,3 +668,4 @@ if __name__ == "__main__":
     bankUI.mainloop()
     
 #TODO HISTORICO
+#TODO README
