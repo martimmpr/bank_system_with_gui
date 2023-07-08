@@ -288,10 +288,10 @@ class BankUI(customtkinter.CTk):
         self.historic_frame_historic_title = customtkinter.CTkLabel(self.historic_frame, text = "  Histórico", image = self.historic_icon, 
                                                                     fg_color = "transparent", compound = "left", text_color = ("gray10", "gray90"), 
                                                                     font = customtkinter.CTkFont(size = 15, weight = "normal"))
-        self.historic_frame_historic_title.place(x = 30, y = 20)
-        self.historic_frame_historic = customtkinter.CTkFrame(self.historic_frame, corner_radius = 20, width = 720, height = 460, 
+        self.historic_frame_historic_title.place(x = 30, y = 15)
+        self.historic_frame_historic = customtkinter.CTkFrame(self.historic_frame, corner_radius = 20, width = 720, height = 475.5, 
                                                               fg_color = ("gray75", "gray25"))
-        self.historic_frame_historic.place(x = 30, y = 55)
+        self.historic_frame_historic.place(x = 30, y = 50)
     
         # DEFAULT FRAME #
         self.select_frame_by_name("home")
@@ -361,9 +361,9 @@ class BankUI(customtkinter.CTk):
         self.home_frame_account_logout.place(x = 252.5, y = 157.5)
         
     def load_historic(self, historic):
+        #HOME FRAME HISTORIC #
         home_historic = historic.loc[historic['account_number'] == self.logged_number, ['action', 'destination', 'amount']].tail(3).values.tolist()
         home_historic = home_historic[::-1]
-        self.historic_len = len(home_historic)
 
         for i in range(0, len(home_historic)):
             if home_historic[i][0] == "deposit":
@@ -423,6 +423,246 @@ class BankUI(customtkinter.CTk):
                                                                             fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
                                                                             font = customtkinter.CTkFont(size = 20, weight = "bold"))
                 self.home_frame_historic_3_amount.place(x = 245, y = 10)
+        
+        # HISTORIC FRAME HISTORIC #
+        historic_historic = historic.loc[historic['account_number'] == self.logged_number, ['action', 'destination', 'amount']].tail(14).values.tolist()
+        historic_historic = historic_historic[::-1]
+        
+        for i in range(0, len(historic_historic)):
+            if historic_historic[i][0] == "deposit":
+                image = self.deposit_icon
+            elif historic_historic[i][0] == "withdraw":
+                image = self.withdraw_icon
+            elif historic_historic[i][0] == "transfer":
+                image = self.transfer_icon
+            
+            if i == 0:
+                self.historic_frame_historic_1 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_1.place(x = 7.5, y = 7.5)
+                self.historic_frame_historic_1_icon = customtkinter.CTkButton(self.historic_frame_historic_1, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_1_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_1_number = customtkinter.CTkLabel(self.historic_frame_historic_1, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_1_number.place(x = 60, y = 10)
+                self.historic_frame_historic_1_amount = customtkinter.CTkLabel(self.historic_frame_historic_1, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_1_amount.place(x = 245, y = 10)
+            elif i == 1:
+                self.historic_frame_historic_2 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_2.place(x = 362.5, y = 7.5)
+                self.historic_frame_historic_2_icon = customtkinter.CTkButton(self.historic_frame_historic_2, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_2_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_2_number = customtkinter.CTkLabel(self.historic_frame_historic_2, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_2_number.place(x = 60, y = 10)
+                self.historic_frame_historic_2_amount = customtkinter.CTkLabel(self.historic_frame_historic_2, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_2_amount.place(x = 245, y = 10)
+            elif i == 2:
+                self.historic_frame_historic_3 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_3.place(x = 7.5, y = 72.5)
+                self.historic_frame_historic_3_icon = customtkinter.CTkButton(self.historic_frame_historic_3, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_3_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_3_number = customtkinter.CTkLabel(self.historic_frame_historic_3, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_3_number.place(x = 60, y = 10)
+                self.historic_frame_historic_3_amount = customtkinter.CTkLabel(self.historic_frame_historic_3, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_3_amount.place(x = 245, y = 10)
+            elif i == 3:
+                self.historic_frame_historic_4 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_4.place(x = 362.5, y = 72.5)
+                self.historic_frame_historic_4_icon = customtkinter.CTkButton(self.historic_frame_historic_4, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_4_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_4_number = customtkinter.CTkLabel(self.historic_frame_historic_4, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_4_number.place(x = 60, y = 10)
+                self.historic_frame_historic_4_amount = customtkinter.CTkLabel(self.historic_frame_historic_4, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_4_amount.place(x = 245, y = 10)
+            elif i == 4:
+                self.historic_frame_historic_5 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_5.place(x = 7.5, y = 140)
+                self.historic_frame_historic_5_icon = customtkinter.CTkButton(self.historic_frame_historic_5, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_5_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_5_number = customtkinter.CTkLabel(self.historic_frame_historic_5, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_5_number.place(x = 60, y = 10)
+                self.historic_frame_historic_5_amount = customtkinter.CTkLabel(self.historic_frame_historic_5, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_5_amount.place(x = 245, y = 10)
+            elif i == 5:
+                self.historic_frame_historic_6 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_6.place(x = 362.5, y = 140)
+                self.historic_frame_historic_6_icon = customtkinter.CTkButton(self.historic_frame_historic_6, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_6_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_6_number = customtkinter.CTkLabel(self.historic_frame_historic_6, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_6_number.place(x = 60, y = 10)
+                self.historic_frame_historic_6_amount = customtkinter.CTkLabel(self.historic_frame_historic_6, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_6_amount.place(x = 245, y = 10)
+            elif i == 6:
+                self.historic_frame_historic_7 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_7.place(x = 7.5, y = 207.5)
+                self.historic_frame_historic_7_icon = customtkinter.CTkButton(self.historic_frame_historic_7, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_7_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_7_number = customtkinter.CTkLabel(self.historic_frame_historic_7, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_7_number.place(x = 60, y = 10)
+                self.historic_frame_historic_7_amount = customtkinter.CTkLabel(self.historic_frame_historic_7, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_7_amount.place(x = 245, y = 10)
+            elif i == 7:
+                self.historic_frame_historic_8 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_8.place(x = 362.5, y = 207.5)
+                self.historic_frame_historic_8_icon = customtkinter.CTkButton(self.historic_frame_historic_8, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_8_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_8_number = customtkinter.CTkLabel(self.historic_frame_historic_8, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_8_number.place(x = 60, y = 10)
+                self.historic_frame_historic_8_amount = customtkinter.CTkLabel(self.historic_frame_historic_8, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_8_amount.place(x = 245, y = 10)
+            elif i == 8:
+                self.historic_frame_historic_9 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_9.place(x = 7.5, y = 275)
+                self.historic_frame_historic_9_icon = customtkinter.CTkButton(self.historic_frame_historic_9, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_9_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_9_number = customtkinter.CTkLabel(self.historic_frame_historic_9, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_9_number.place(x = 60, y = 10)
+                self.historic_frame_historic_9_amount = customtkinter.CTkLabel(self.historic_frame_historic_9, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_9_amount.place(x = 245, y = 10)
+            elif i == 9:
+                self.historic_frame_historic_10 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_10.place(x = 362.5, y = 275)
+                self.historic_frame_historic_10_icon = customtkinter.CTkButton(self.historic_frame_historic_10, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_10_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_10_number = customtkinter.CTkLabel(self.historic_frame_historic_10, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_10_number.place(x = 60, y = 10)
+                self.historic_frame_historic_10_amount = customtkinter.CTkLabel(self.historic_frame_historic_10, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_10_amount.place(x = 245, y = 10)
+            elif i == 10:
+                self.historic_frame_historic_11 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_11.place(x = 7.5, y = 342.5)
+                self.historic_frame_historic_11_icon = customtkinter.CTkButton(self.historic_frame_historic_11, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_11_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_11_number = customtkinter.CTkLabel(self.historic_frame_historic_11, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_11_number.place(x = 60, y = 10)
+                self.historic_frame_historic_11_amount = customtkinter.CTkLabel(self.historic_frame_historic_11, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_11_amount.place(x = 245, y = 10)
+            elif i == 11:
+                self.historic_frame_historic_12 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_12.place(x = 362.5, y = 342.5)
+                self.historic_frame_historic_12_icon = customtkinter.CTkButton(self.historic_frame_historic_12, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_12_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_12_number = customtkinter.CTkLabel(self.historic_frame_historic_12, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_12_number.place(x = 60, y = 10)
+                self.historic_frame_historic_12_amount = customtkinter.CTkLabel(self.historic_frame_historic_12, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_12_amount.place(x = 245, y = 10)
+            elif i == 12:
+                self.historic_frame_historic_13 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_13.place(x = 7.5, y = 410)
+                self.historic_frame_historic_13_icon = customtkinter.CTkButton(self.historic_frame_historic_13, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_13_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_13_number = customtkinter.CTkLabel(self.historic_frame_historic_13, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_13_number.place(x = 60, y = 10)
+                self.historic_frame_historic_13_amount = customtkinter.CTkLabel(self.historic_frame_historic_13, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_13_amount.place(x = 245, y = 10)
+            elif i == 13:
+                self.historic_frame_historic_14 = customtkinter.CTkFrame(self.historic_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.historic_frame_historic_14.place(x = 362.5, y = 410)
+                self.historic_frame_historic_14_icon = customtkinter.CTkButton(self.historic_frame_historic_14, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.historic_frame_historic_14_icon.place(x = 10, y = 10)
+                if historic_historic[i][0] == "transfer":
+                    self.historic_frame_historic_14_number = customtkinter.CTkLabel(self.historic_frame_historic_14, text = historic_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.historic_frame_historic_14_number.place(x = 60, y = 10)
+                self.historic_frame_historic_14_amount = customtkinter.CTkLabel(self.historic_frame_historic_14, text = f"{historic_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.historic_frame_historic_14_amount.place(x = 245, y = 10)
+                
+        
+        self.historic_len = len(historic_historic)
          
     def logout_account(self):   
         bankUI.close_edit_account()
@@ -440,21 +680,56 @@ class BankUI(customtkinter.CTk):
                                                                  image = self.create_icon, compound = "left", text_color = ("gray10", "gray90"),
                                                                  command = self.open_createaccount_window)
         self.home_frame_account_create.place(x = 75, y = 40)
-        self.home_frame_account_login = customtkinter.CTkButton(self.home_frame_account, text = "Entrar", width = 150, height = 50, 
-                                                                image = self.login_icon, compound = "left", text_color = ("gray10", "gray90"), 
-                                                                font = customtkinter.CTkFont(size = 13, weight = "normal"),
+        self.home_frame_account_login = customtkinter.CTkButton(self.home_frame_account, text = "Entrar", width = 150, height = 50, image = self.login_icon, 
+                                                                compound = "left", text_color = ("gray10", "gray90"), font = customtkinter.CTkFont(size = 13, weight = "normal"),
                                                                 command = self.open_loginaccount_window)
         self.home_frame_account_login.place(x = 75, y = 110)
         
     def unload_historic(self):
         if self.historic_len >= 1:
             self.home_frame_historic_1.destroy()
+            self.historic_frame_historic_1.destroy()
             
         if self.historic_len >= 2:
             self.home_frame_historic_2.destroy()
+            self.historic_frame_historic_2.destroy()
             
         if self.historic_len >= 3:
             self.home_frame_historic_3.destroy()
+            self.historic_frame_historic_3.destroy()
+            
+        if self.historic_len >= 4:
+            self.historic_frame_historic_4.destroy()
+            
+        if self.historic_len >= 5:
+            self.historic_frame_historic_5.destroy()
+            
+        if self.historic_len >= 6:
+            self.historic_frame_historic_6.destroy()
+            
+        if self.historic_len >= 7:
+            self.historic_frame_historic_7.destroy()
+            
+        if self.historic_len >= 8:
+            self.historic_frame_historic_8.destroy()
+            
+        if self.historic_len >= 9:
+            self.historic_frame_historic_9.destroy()
+            
+        if self.historic_len >= 10:
+            self.historic_frame_historic_10.destroy()
+            
+        if self.historic_len >= 11:
+            self.historic_frame_historic_11.destroy()
+            
+        if self.historic_len >= 12:
+            self.historic_frame_historic_12.destroy()
+            
+        if self.historic_len >= 13:
+            self.historic_frame_historic_13.destroy()
+            
+        if self.historic_len >= 14:
+            self.historic_frame_historic_14.destroy()
         
     def account_deposit_trigger(self):
         bank.deposit_account(self.logged_number, self.money_on_hand, self.home_frame_deposit_amount.get())
@@ -763,5 +1038,3 @@ if __name__ == "__main__":
     bankUI = BankUI()
     bankUI.protocol("WM_DELETE_WINDOW", bank.save_data)
     bankUI.mainloop()
-    
-#TODO HISTORIC TAB 
