@@ -163,6 +163,7 @@ class BankUI(customtkinter.CTk):
         self.last_notify = ""
         self.logged_number = ""
         self.money_on_hand = 0
+        self.historic_len = 0
         
         # APP PROPERTIES #
         self.resizable(0, 0)
@@ -898,7 +899,10 @@ class Bank:
         if len(name) <= 0 or len(name) > 26:
             return bankUI.open_notification_window("Nome inválido!")
         
-        if len(pin) != 4 and math.isnan(pin):
+        try:
+            if len(pin) != 4 and math.isnan(pin):
+                return bankUI.open_notification_window("PIN inválido!")
+        except TypeError:
             return bankUI.open_notification_window("PIN inválido!")
         
         if not self.accounts.loc[self.accounts['account_name'] == name].empty:
@@ -922,7 +926,10 @@ class Bank:
         if len(name) <= 0 or len(name) > 26:
             return bankUI.open_notification_window("Nome inválido!")
         
-        if len(pin) != 4 and math.isnan(pin):
+        try:
+            if len(pin) != 4 and math.isnan(pin):
+                return bankUI.open_notification_window("PIN inválido!")
+        except TypeError:
             return bankUI.open_notification_window("PIN inválido!")
         
         if self.accounts.loc[(self.accounts['account_name'] == name) & (self.accounts['account_pin'] == pin)].empty:
@@ -951,7 +958,7 @@ class Bank:
         self.accounts.loc[self.accounts['account_number'] == number, 'account_pin'] = pin
         bankUI.change_bank_name(self.accounts['account_name'][self.accounts['account_number'] == number].values[0])
         bankUI.close_edit_account()
-        bankUI.open_notification_window("Alterações realizados com sucesso!")
+        bankUI.open_notification_window("Alterações realizadas com sucesso!")
         
     def update_new_historic(self, number, action, destination, amount):
         new_transaction = pd.DataFrame([{'account_number': number, 'action': action, 'destination': destination, 'amount': amount}])
