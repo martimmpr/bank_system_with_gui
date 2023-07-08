@@ -2,7 +2,7 @@
 > Projeto de um sistema bancário com GUI e SQL.
 
 ## Demonstração do projeto
-- (WIP)
+- https://github.com/martimr33/bank_system_with_gui/assets/65677252/01428ab5-f25e-4044-9215-c8010b3955b4
 
 ## Resumo do projeto
 ### Neste projeto foram criadas as 6 seguintes classes:
