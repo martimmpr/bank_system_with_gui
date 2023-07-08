@@ -162,7 +162,7 @@ class BankUI(customtkinter.CTk):
         self.notification_state = False
         self.last_notify = ""
         self.logged_number = ""
-        self.money_on_hand = 0.0
+        self.money_on_hand = 0
         
         # APP PROPERTIES #
         self.resizable(0, 0)
@@ -363,9 +363,74 @@ class BankUI(customtkinter.CTk):
         self.home_frame_account_logout = customtkinter.CTkButton(self.home_frame_account, text = "", width = 20, height = 20, image = self.logout_icon,
                                                                  fg_color = "transparent", hover_color = ("gray75", "gray25"), command = self.logout_account)
         self.home_frame_account_logout.place(x = 252.5, y = 157.5)
+        
+    def load_historic(self, historic):
+        home_historic = historic.loc[historic['account_number'] == self.logged_number, ['action', 'destination', 'amount']].tail(3).values.tolist()
+        home_historic = home_historic[::-1]
+        self.historic_len = len(home_historic)
+
+        for i in range(0, len(home_historic)):
+            if home_historic[i][0] == "deposit":
+                image = self.deposit_icon
+            elif home_historic[i][0] == "withdraw":
+                image = self.withdraw_icon
+            elif home_historic[i][0] == "transfer":
+                image = self.transfer_icon
+            
+            if i == 0:
+                self.home_frame_historic_1 = customtkinter.CTkFrame(self.home_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.home_frame_historic_1.place(x = 15, y = 15)
+                self.home_frame_historic_1_icon = customtkinter.CTkButton(self.home_frame_historic_1, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.home_frame_historic_1_icon.place(x = 10, y = 10)
+                if home_historic[i][0] == "transfer":
+                    self.home_frame_historic_1_number = customtkinter.CTkLabel(self.home_frame_historic_1, text = home_historic[i][1], width = 150, height = 40, 
+                                                                               fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                               font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.home_frame_historic_1_number.place(x = 60, y = 10)
+                self.home_frame_historic_1_amount = customtkinter.CTkLabel(self.home_frame_historic_1, text = f"{home_historic[i][2]}€", width = 90, height = 40, 
+                                                                           fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                           font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.home_frame_historic_1_amount.place(x = 245, y = 10)
+                
+            elif i == 1:
+                self.home_frame_historic_2 = customtkinter.CTkFrame(self.home_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.home_frame_historic_2.place(x = 15, y = 82.5)
+                self.home_frame_historic_2_icon = customtkinter.CTkButton(self.home_frame_historic_2, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.home_frame_historic_2_icon.place(x = 10, y = 10)
+                if home_historic[i][0] == "transfer":
+                    self.home_frame_historic_2_number = customtkinter.CTkLabel(self.home_frame_historic_2, text = home_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.home_frame_historic_2_number.place(x = 60, y = 10)
+                self.home_frame_historic_2_amount = customtkinter.CTkLabel(self.home_frame_historic_2, text = f"{home_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.home_frame_historic_2_amount.place(x = 245, y = 10)
+                
+            elif i == 2:
+                self.home_frame_historic_3 = customtkinter.CTkFrame(self.home_frame_historic, corner_radius = 10, width = 350, height = 60, 
+                                                                  fg_color = ("gray90", "gray10"))
+                self.home_frame_historic_3.place(x = 15, y = 150)
+                self.home_frame_historic_3_icon = customtkinter.CTkButton(self.home_frame_historic_3, text = "", width = 40, height = 40, 
+                                                                          image = image, state = "DISABLED")
+                self.home_frame_historic_3_icon.place(x = 10, y = 10)
+                if home_historic[i][0] == "transfer":
+                    self.home_frame_historic_3_number = customtkinter.CTkLabel(self.home_frame_historic_3, text = home_historic[i][1], width = 150, height = 40, 
+                                                                                fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                                font = customtkinter.CTkFont(size = 15, weight = "bold"))
+                    self.home_frame_historic_3_number.place(x = 60, y = 10)
+                self.home_frame_historic_3_amount = customtkinter.CTkLabel(self.home_frame_historic_3, text = f"{home_historic[i][2]}€", width = 90, height = 40, 
+                                                                            fg_color = "transparent", text_color = ("gray10", "gray90"), anchor = "e", 
+                                                                            font = customtkinter.CTkFont(size = 20, weight = "bold"))
+                self.home_frame_historic_3_amount.place(x = 245, y = 10)
          
     def logout_account(self):   
         bankUI.close_edit_account()
+        bankUI.unload_historic()
         self.logged_number = ""
         
         self.home_frame_account_name.destroy()
@@ -384,6 +449,16 @@ class BankUI(customtkinter.CTk):
                                                                 font = customtkinter.CTkFont(size = 13, weight = "normal"),
                                                                 command = self.open_loginaccount_window)
         self.home_frame_account_login.place(x = 75, y = 110)
+        
+    def unload_historic(self):
+        if self.historic_len >= 1:
+            self.home_frame_historic_1.destroy()
+            
+        if self.historic_len >= 2:
+            self.home_frame_historic_2.destroy()
+            
+        if self.historic_len >= 3:
+            self.home_frame_historic_3.destroy()
         
     def account_deposit_trigger(self):
         bank.deposit_account(self.logged_number, self.money_on_hand, self.home_frame_deposit_amount.get())
@@ -476,9 +551,10 @@ class BankUI(customtkinter.CTk):
             
 class Bank:
     def __init__(self):
-        self.get_accounts()
+        self.get_data()
+        self.new_historic = pd.DataFrame(columns = ["account_number", "action", "destination", "amount"])
         
-    def get_accounts(self):
+    def get_data(self):
         self.connection = mysql.connector.connect(
             host = '127.0.0.1',
             user = 'root',
@@ -492,10 +568,15 @@ class Bank:
         columns = [desc[0] for desc in self.cursor.description]
         self.accounts = pd.DataFrame(data, columns = columns)
         
+        self.cursor.execute("SELECT * FROM historic")
+        data = self.cursor.fetchall()
+        columns = [desc[0] for desc in self.cursor.description]
+        self.historic = pd.DataFrame(data, columns = columns)
+        
         self.cursor.close()
         self.connection.close()
         
-    def save_accounts(self):
+    def save_data(self):
         self.connection = mysql.connector.connect(
             host = '127.0.0.1',
             user = 'root',
@@ -503,9 +584,6 @@ class Bank:
             database = 'bank'
         )
         self.cursor = self.connection.cursor()
-        
-        self.cursor.execute("DELETE FROM accounts")
-        self.connection.commit()
 
         for _, data in self.accounts.iterrows():
             name = data['account_name']
@@ -525,6 +603,18 @@ class Bank:
                 insert_query = "INSERT INTO accounts (account_name, account_pin, balance, account_number) VALUES (%s, %s, %s, %s)"
                 values = (name, pin, balance, number)
                 self.cursor.execute(insert_query, values)
+                
+            self.connection.commit()
+
+        for _, data in self.new_historic.iterrows():
+            number = data['account_number']
+            action = data['action']
+            destination = data['destination']
+            amount = data['amount']
+
+            insert_query = "INSERT INTO historic (account_number, action, destination, amount) VALUES (%s, %s, %s, %s)"
+            values = (number, action, destination, amount)
+            self.cursor.execute(insert_query, values)
                 
             self.connection.commit()
 
@@ -555,6 +645,7 @@ class Bank:
         self.accounts = pd.concat([self.accounts, new_account], ignore_index = True)
 
         bankUI.logged_account(name, number, balance)
+        bankUI.load_historic(pd.concat([self.historic, self.new_historic], ignore_index = True))
         
     def login_account(self, name, pin):
         if len(name) <= 0 or len(name) > 26:
@@ -573,6 +664,7 @@ class Bank:
         balance = filter_balance['balance'].values[0]
         
         bankUI.logged_account(name, number, balance)
+        bankUI.load_historic(pd.concat([self.historic, self.new_historic], ignore_index = True))
         
     def edit_account(self, name, pin, number):
         if len(name) <= 0 or len(name) > 26:
@@ -590,6 +682,12 @@ class Bank:
         bankUI.close_edit_account()
         bankUI.open_notification_window("Alterações realizados com sucesso!")
         
+    def update_new_historic(self, number, action, destination, amount):
+        new_transaction = pd.DataFrame([{'account_number': number, 'action': action, 'destination': destination, 'amount': amount}])
+        self.new_historic = pd.concat([self.new_historic, new_transaction], ignore_index = True)
+
+        bankUI.load_historic(pd.concat([self.historic, self.new_historic], ignore_index = True))
+        
     def deposit_account(self, number, money_hand, deposit_amount):
         if number != "":
             try:
@@ -602,6 +700,7 @@ class Bank:
                         money_hand -= amount
                         self.accounts.loc[self.accounts['account_number'] == number, 'balance'] += amount
                         bankUI.open_notification_window(f"Depósito de {amount}€ com sucesso!")
+                        bank.update_new_historic(number, "deposit", None, amount)
                         bankUI.change_money_on_hand(money_hand)
                         bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
                     else:
@@ -626,6 +725,7 @@ class Bank:
                         money_hand += amount
                         self.accounts.loc[self.accounts['account_number'] == number, 'balance'] -= amount
                         bankUI.open_notification_window(f"Levantamento de {amount}€ com sucesso!")
+                        bank.update_new_historic(number, "withdraw", None, amount)
                         bankUI.change_money_on_hand(money_hand)
                         bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
                     else:
@@ -651,6 +751,7 @@ class Bank:
                             self.accounts.loc[self.accounts['account_number'] == number, 'balance'] -= amount
                             self.accounts.loc[self.accounts['account_number'] == number_to, 'balance'] += amount
                             bankUI.open_notification_window(f"Transferido {amount}€ com sucesso!")
+                            bank.update_new_historic(number, "transfer", number_to, amount)
                             bankUI.change_bank_balance(self.accounts['balance'][self.accounts['account_number'] == number].values[0])
                         else:
                             bankUI.open_notification_window("Dinheiro insuficiente!")
@@ -664,8 +765,7 @@ class Bank:
 if __name__ == "__main__":
     bank = Bank()
     bankUI = BankUI()
-    bankUI.protocol("WM_DELETE_WINDOW", bank.save_accounts)
+    bankUI.protocol("WM_DELETE_WINDOW", bank.save_data)
     bankUI.mainloop()
     
-#TODO HISTORICO
-#TODO README
+#TODO HISTORIC TAB 
