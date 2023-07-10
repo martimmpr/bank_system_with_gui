@@ -362,6 +362,8 @@ class BankUI(customtkinter.CTk):
         self.home_frame_account_logout.place(x = 252.5, y = 157.5)
         
     def load_historic(self, historic):
+        bankUI.unload_historic()
+        
         #HOME FRAME HISTORIC #
         home_historic = historic.loc[historic['account_number'] == self.logged_number, ['action', 'destination', 'amount']].tail(3).values.tolist()
         home_historic = home_historic[::-1]
